@@ -1,0 +1,463 @@
+<html>
+<head>
+</head>
+<body onload="setInterval(function(){step();}, 16);">
+<canvas id="canvas" width="1200" height="800">
+         This text is displayed if your browser 
+         does not support HTML5 Canvas.
+        </canvas>
+
+<script>
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  var t = 0.0;
+  var externalForce = [0,750];
+  var particle1 = {
+    pos : [30,20],
+    vel : [0,0],
+    stable : true,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle2 = {
+    pos :[80,30],
+    vel : [0,0],
+    stable : true,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle3 = {
+    pos :[130,30],
+    vel : [0,0],
+    stable : true,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle4 = {
+    pos :[180,20],
+    vel : [0,0],
+    stable : true,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+
+  var particle5 = {
+    pos : [120,40],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle6 = {
+    pos :[135,40],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle7 = {
+    pos :[150,40],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle8 = {
+    pos :[190,40],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+
+  var particle9 = {
+    pos : [120,50],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle10 = {
+    pos :[135,50],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle11 = {
+    pos :[150,50],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+  var particle12 = {
+    pos :[190,50],
+    vel : [0,0],
+    stable : false,
+    springs : [],
+    accel : function(pos,vel,t) { return paccel(this,pos,vel,t); }
+  }
+
+  var spring1 = {
+    other : particle1,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring2 = {
+    other : particle2,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring3 = {
+    other : particle3,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+
+  var spring4 = {
+    other : particle1,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring5 = {
+    other : particle2,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring6 = {
+    other : particle3,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+    var spring7 = {
+    other : particle4,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring8 = {
+    other : particle5,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring9 = {
+    other : particle6,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring10 = {
+    other : particle7,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+
+
+  var spring11 = {
+    other : particle5,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring12 = {
+    other : particle6,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring13 = {
+    other : particle7,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+    var spring14 = {
+    other : particle8,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring15 = {
+    other : particle9,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring16 = {
+    other : particle10,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring17 = {
+    other : particle11,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+
+  var spring18 = {
+    other : particle12,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring19 = {
+    other : particle11,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring20 = {
+    other : particle10,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+
+  var spring21 = {
+    other : particle8,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring22 = {
+    other : particle7,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring23 = {
+    other : particle6,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+
+  var spring24 = {
+    other : particle9,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring25 = {
+    other : particle10,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring26 = {
+    other : particle11,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+  var spring27 = {
+    other : particle12,
+    springK : 10.0,
+    damper : 0.75,
+    restLength : 50.0,
+    accel : function(pos,vel){ return springaccel(this,pos,vel); }
+  }
+
+
+  particle2.springs.push(spring1);
+  particle3.springs.push(spring2);
+  particle4.springs.push(spring3);
+
+  particle5.springs.push(spring4);
+  particle6.springs.push(spring5);
+  particle7.springs.push(spring6);
+  particle8.springs.push(spring7);
+  particle6.springs.push(spring8);
+  particle7.springs.push(spring9);
+  particle8.springs.push(spring10);
+
+  particle9.springs.push(spring11);
+  particle10.springs.push(spring12);
+  particle11.springs.push(spring13);
+  particle12.springs.push(spring14);
+  particle10.springs.push(spring15);
+  particle11.springs.push(spring16);
+  particle12.springs.push(spring17);
+
+  particle11.springs.push(spring18);
+  particle10.springs.push(spring19);
+  particle9.springs.push(spring20);
+
+  particle7.springs.push(spring21);
+  particle6.springs.push(spring22);
+  particle5.springs.push(spring23);
+
+  particle5.springs.push(spring24);
+  particle6.springs.push(spring25);
+  particle7.springs.push(spring26);
+  particle8.springs.push(spring27);
+
+  var particles = [particle1,particle2,particle3,particle4,particle5,particle6,particle7,particle8,particle9,particle10,particle11,particle12];
+
+  function dot(u,v) {
+    return u[0]*v[0] + u[1]*v[1];
+  }
+
+  function springaccel(spring, pos, vel) {
+    var otherpos = spring.other.pos;
+    var diff = [pos[0] - otherpos[0], pos[1] - otherpos[1]];
+
+    var mag = Math.sqrt(diff[0]*diff[0] + diff[1]*diff[1]);
+    var unitDir = [diff[0]/mag, diff[1]/mag];
+    var result =  [0,0];
+
+    result[0] = (-spring.springK * (mag-spring.restLength)*dot(unitDir, [1,0]))-vel[0]*spring.damper;
+    result[1] = (-spring.springK * (mag-spring.restLength)*dot(unitDir, [0,1]))-vel[1]*spring.damper;
+    return result;
+  }
+
+  function paccel(p,pos, vel, t) {
+    var result = [0, 0];
+    var size = p.springs.length;
+    for (var i=0; i<size; i++) {
+      var force = p.springs[i].accel(pos, vel);
+      result[0] += force[0];
+      result[1] += force[1];
+    }
+    result[0] += externalForce[0];
+    result[1] += externalForce[1];
+    return result;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, 300, 400);
+    ctx.fillStyle = "#FAF7F8";
+    ctx.beginPath();
+    ctx.rect(0,0,300,400);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#444444";
+
+    var size = particles.length;
+    for (var i=0; i<size; i++) {
+       ctx.beginPath();
+       ctx.arc(particles[i].pos[0], particles[i].pos[1], 10, 0, Math.PI*2, true);
+       ctx.fill();
+      var ssize = particles[i].springs.length;
+      for (var j=0; j<ssize; j++) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].springs[j].other.pos[0],particles[i].springs[j].other.pos[1]);
+        ctx.lineTo(particles[i].pos[0], particles[i].pos[1]);
+        ctx.stroke();
+       }
+    }
+  }
+
+  function step() {
+    var size = particles.length;
+    var dt = 1.0/60.0;
+    for (var i=0; i<size; i++) {
+      if (!particles[i].stable) {
+        var result = stopBounds(integrate(particles[i], t, dt));
+        if ( result[2]==1 ) {
+          particles[i].pos[0] += result[0][0]*dt;
+          particles[i].pos[1] += result[0][1]*dt;
+
+          particles[i].vel[0] += result[1][0]*dt;
+          particles[i].vel[1] += result[1][1]*dt;
+        }
+      }
+    }
+    t += dt;
+    draw();
+    externalForce[0] = 0;
+  }
+
+  function integrate(p, t, dt) {
+    var a = evaluate(p, t, dt, [[0,0],[0,0]]);
+    var b = evaluate(p, t, dt * 0.5, a);
+    var c = evaluate(p, t, dt * 0.5, b);
+    var d = evaluate(p, t, dt, c);
+
+    var dpdt = [0,0]
+    var dvdt = [0,0]
+    dpdt[0] = 1.0 / 6.0 * (a[0][0] + 2.0 * (b[0][0] + c[0][0]) + d[0][0]);
+    dpdt[1] = 1.0 / 6.0 * (a[0][1] + 2.0 * (b[0][1] + c[0][1]) + d[0][1]);
+
+    dvdt[0] = 1.0 / 6.0 * (a[1][0] + 2.0 * (b[1][0] + c[1][0]) + d[1][0]);
+    dvdt[1] = 1.0 / 6.0 * (a[1][1] + 2.0 * (b[1][1] + c[1][1]) + d[1][1]);
+
+    return [dpdt,dvdt];
+  }
+  
+  function stopBounds(dpdvdt) {
+    var result = [[dpdvdt[0][0],dpdvdt[0][1]],[dpdvdt[1][0],dpdvdt[1][1]],1];
+    // if( dpdvdt[0][0] < 0 || dpdvdt[0][0] >= 700 ) {
+    //   result[0][0] = 0;
+    //   result[1][0] = 0;
+    //   result[2] = 0;
+    // }
+    // if( dpdvdt[0][1] < 0 || dpdvdt[0][1] >= 500 ) {
+    //   result[0][1] = 0;
+    //   result[1][1] = 0;
+    //   result[2] = 0;
+    // }
+    return result;
+  }
+
+  function evaluate(p, t, dt, dpdv) {
+    var pos = [p.pos[0]+dpdv[0][0]*dt, p.pos[1]+dpdv[0][1]*dt];
+    var vel = [p.vel[0]+dpdv[1][0]*dt, p.vel[1]+dpdv[1][1]*dt];
+
+    var output = [[0,0],[0,0]];
+    output[0] = vel;
+    output[1] = p.accel(pos, vel, t + dt);
+    return output;
+  }
+
+  document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 37) {
+        externalForce[0] = -700;
+    }
+    else if(event.keyCode == 39) {
+      particles[8].pos = [120,50];
+      particles[9].pos = [130,50];
+      particles[10].pos = [150,50];
+      particles[11].pos = [180,50];
+    }
+  });
+</script>
+</body>
+</html>
